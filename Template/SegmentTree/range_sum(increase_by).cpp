@@ -1,6 +1,3 @@
-#include <vector>
-using namespace std;
-
 using ll = long long;
 vector<ll> arr;
 vector<ll> sum;
@@ -46,6 +43,7 @@ void down(ll pos, ll current_left, ll current_right)
     lazy[pos] = 0;
 }
 
+// [left, right] -- query range, [current_left, current_right] -- search range
 void update(ll left, ll right, ll current_left, ll current_right, ll val, ll pos = 1)
 {
     //若当前搜索区间包含于修改区间，同步修改sum和lazy的值并返回
@@ -73,7 +71,8 @@ void update(ll left, ll right, ll current_left, ll current_right, ll val, ll pos
     //回溯（同时加上lazy标志*区间长度的值）
     sum[pos] = sum[leftson(pos)] + sum[rightson(pos)];
 }
- 
+
+// [left, right] -- query range, [current_left, current_right] -- search range
 ll query(ll left, ll right, ll current_left, ll current_right, ll pos = 1)
 {
 	if (left <= current_left && right >= current_right)

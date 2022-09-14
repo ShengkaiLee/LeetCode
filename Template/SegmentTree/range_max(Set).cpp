@@ -1,6 +1,6 @@
 using ll = long long;
 vector<ll> arr;
-vector<ll> sum;
+vector<ll> MAX;
 vector<ll> lazy;
 int N;
 inline ll leftson(ll fa)
@@ -17,12 +17,12 @@ void build(ll left, ll right, ll pos = 1)
 {
     if (left == right)
     {   
-        sum[pos] = arr[left];
+        MAX[pos] = arr[left];
         return;
     }
     build(left, (left + right) >> 1, leftson(pos));
     build(((left + right) >> 1) + 1, right, rightson(pos));
-    sum[pos] = sum[leftson(pos)] + sum[rightson(pos)];
+    MAX[pos] = max(MAX[leftson(pos)],MAX[rightson(pos)]);
 }
 
 //更新下一层的值并下传lazy标志
@@ -34,8 +34,8 @@ void down(ll pos, ll current_left, ll current_right)
     //更新两个子节点的值：加上lazy的值*区间长度
     ll ls = leftson(pos), rs = rightson(pos);
     ll mid = (current_left + current_right) >> 1;
-    sum[ls] = lazy[pos] * (mid - current_left + 1);
-    sum[rs] = lazy[pos] * (current_right - mid);
+    MAX[ls] = lazy[pos];
+    MAX[rs] = lazy[pos];
 
     //下传lazy标志并清空该位置的lazy标志
     lazy[ls] = lazy[pos];
@@ -46,10 +46,10 @@ void down(ll pos, ll current_left, ll current_right)
 // [left, right] -- query range, [current_left, current_right] -- search range
 void update(ll left, ll right, ll current_left, ll current_right, ll val, ll pos = 1)
 {
-    //若当前搜索区间包含于修改区间，同步修改sum和lazy的值并返回
+    //若当前搜索区间包含于修改区间，同步修改MAX和lazy的值并返回
     if (left <= current_left && right >= current_right)
     {
-        sum[pos] = val * (current_right - current_left + 1);//val*区间长度
+        MAX[pos] = val;
         lazy[pos] = val;
         return;
     }
@@ -68,7 +68,7 @@ void update(ll left, ll right, ll current_left, ll current_right, ll val, ll pos
     }
 
     //回溯（同时加上lazy标志*区间长度的值）
-    sum[pos] = sum[leftson(pos)] + sum[rightson(pos)];
+    MAX[pos] = max(MAX[leftson(pos)], MAX[rightson(pos)]);
 }
 
 // [left, right] -- query range, [current_left, current_right] -- search range
@@ -76,7 +76,7 @@ ll query(ll left, ll right, ll current_left, ll current_right, ll pos = 1)
 {
 	if (left <= current_left && right >= current_right)
 	{
-		return sum[pos];
+		return MAX[pos];
 	}
  
 	//若不能直接返回区间值，则需下传lazy标志
@@ -88,5 +88,5 @@ ll query(ll left, ll right, ll current_left, ll current_right, ll pos = 1)
 	else if (left > mid)
 		return query(left, right, mid + 1, current_right, rightson(pos));
 	else
-		return query(left, right, current_left, mid, leftson(pos)) + query(left, right, mid + 1, current_right, rightson(pos));
+		return max(query(left, right, current_left, mid, leftson(pos)),query(left, right, mid + 1, current_right, rightson(pos)));
 }
