@@ -90,3 +90,9 @@ ll query(ll left, ll right, ll current_left, ll current_right, ll pos = 1)
 	else
 		return query(left, right, current_left, mid, leftson(pos)) + query(left, right, mid + 1, current_right, rightson(pos));
 }
+
+int main() {
+    arr.resize(N, 0); // query range(0, N);
+    sum.resize((N<<2)+2, 0);
+    lazy.resize((N<<2)+2, 0);
+}
