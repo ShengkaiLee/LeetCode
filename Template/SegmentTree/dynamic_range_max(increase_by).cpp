@@ -1,7 +1,7 @@
 using ll = long long;
 const static int maxn = 1e5+7;
 //线段树维护区间和 涉及区间修改
-ll tree[maxn<<2];//表示对应的区间和
+ll tree[maxn<<2];//表示对应的区间max  有时候需要 -- /*fill(tree,tree+(maxn<<2), 0);*/
 ll lazy[maxn<<2];//懒标记 表示当前区间的子区间还未被标记信息更新 这里是区间值的变动
 int n,m;
 int lc[maxn<<2],rc[maxn<<2];//动态开点
