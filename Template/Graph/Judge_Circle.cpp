@@ -71,3 +71,32 @@ bool bfs()
     
     return count==numNodes;        
 }
+
+// Find longest cycle
+class Solution {
+private:
+    int ans = -1;
+    unordered_set<int> seen;
+public:
+    int longestCycle(vector<int>& edges) {
+        for (int i = 0; i < edges.size(); i++) {
+            if (seen.count(i)) continue;
+            unordered_map<int,int> dis;
+            dfs(edges, i, 0, dis);
+        }
+        return ans;
+    }
+    
+    void dfs(vector<int>& edges, int curr, int len, unordered_map<int,int>& dis) {
+        if (curr == -1) return;
+        if (not seen.count(curr)) {
+            seen.insert(curr);
+            dis[curr] = len;
+            dfs(edges, edges[curr], len+1, dis);
+        } else {
+            if (dis.count(curr)) {
+                ans = max(ans, len - dis[curr]);
+            }
+        }
+    }
+};
