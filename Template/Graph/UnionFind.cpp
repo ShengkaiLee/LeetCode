@@ -15,7 +15,7 @@ class UnionFind {
         bool connected(int p, int q) { 
             return find(p) == find(q); 
         }
-        voparent connect(int p, int q) {
+        void connect(int p, int q) {
             int i = find(p), j = find(q);
             if (i == j) return;
             if (rank[i] < rank[j]) {
